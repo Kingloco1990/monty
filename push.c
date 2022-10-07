@@ -1,64 +1,37 @@
 #include "monty.h"
-
 /**
-  * push - Adds a new node at the beginning of the stack
-  * @stack: The head of the stack
-  * @param: The value to adds on the stack
-  *
-  * Return: Nothing
-  */
-void push(stack_t **stack, unsigned int param)
+ * f_push - add node to the stack
+ * @head: stack head
+ * @counter: line_number
+ * Return: no return
+*/
+void f_push(stack_t **head, unsigned int counter)
 {
-	stack_t *new_node = NULL;
+	int n, j = 0, flag = 0;
 
-	new_node = malloc(sizeof(stack_t));
-	if (new_node == NULL)
-		handle_error(ERR_BAD_MALL, NULL, 0, NULL);
-
-	new_node->n = param;
-	if (*stack)
+	if (bus.arg)
 	{
-		new_node->next = *stack;
-		new_node->prev = (*stack)->prev;
-		(*stack)->prev = new_node;
-		*stack = new_node;
-		return;
-	}
-
-	new_node->next = *stack;
-	new_node->prev = NULL;
-	*stack = new_node;
-}
-
-/**
-  * push_queue - Adds a new node at the end of the stack
-  * @stack: The head of the stack
-  * @param: The value to adds on the stack
-  *
-  * Return: Nothing
-  */
-void push_queue(stack_t **stack, unsigned int param)
-{
-	stack_t *current = NULL, *new_node = NULL;
-
-	new_node = malloc(sizeof(stack_t));
-	if (new_node == NULL)
-		handle_error(ERR_BAD_MALL, NULL, 0, NULL);
-
-	new_node->n = param;
-	if (*stack)
-	{
-		current = *stack;
-		while (current->next != NULL)
-			current = current->next;
-
-		new_node->next = NULL;
-		new_node->prev = current;
-		current->next = new_node;
-		return;
-	}
-
-	new_node->next = *stack;
-	new_node->prev = NULL;
-	*stack = new_node;
+		if (bus.arg[0] == '-')
+			j++;
+		for (; bus.arg[j] != '\0'; j++)
+		{
+			if (bus.arg[j] > 57 || bus.arg[j] < 48)
+				flag = 1; }
+		if (flag == 1)
+		{ fprintf(stderr, "L%d: usage: push integer\n", counter);
+			fclose(bus.file);
+			free(bus.content);
+			free_stack(*head);
+			exit(EXIT_FAILURE); }}
+	else
+	{ fprintf(stderr, "L%d: usage: push integer\n", counter);
+		fclose(bus.file);
+		free(bus.content);
+		free_stack(*head);
+		exit(EXIT_FAILURE); }
+	n = atoi(bus.arg);
+	if (bus.lifi == 0)
+		addnode(head, n);
+	else
+		addqueue(head, n);
 }
